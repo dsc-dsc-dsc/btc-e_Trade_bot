@@ -10,8 +10,8 @@ import hmac
 import sys
 
 # Replace these with your own API key data
-BTC_api_key = "5APNE8IF-JZXA85DX-CLF7SSXH-IZUYENLD-I08J8H0Y"
-BTC_api_secret = "9ea5e15b27b871d56580be53e548ea7265d31ca100b11a1de60294fc054a5541"
+BTC_api_key = "Api key here"
+BTC_api_secret = "api secret here"
 # Come up with your own method for choosing an incrementing nonce
 #nonce = 13
 with open ('nonce.txt') as f:
