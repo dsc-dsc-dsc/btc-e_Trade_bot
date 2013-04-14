@@ -70,7 +70,7 @@ def make_trade():
     #vars()[curr2] = 0
     print api.getInfo().toString()
     t = api
-    '''try:
+    try:
         r = api.getInfo()
         for d in dir():
             if d[:2] == '__':
@@ -80,5 +80,5 @@ def make_trade():
     except Exception, e:
         print "  An error occurred: %s" % e
     
-'''
+
 make_trade()
