@@ -64,8 +64,11 @@ def get_balance():
     bal2 = account_info[curr2]
 get_balance()
 
+def make_trade(trade):
+    if trade == "buy":
+        print "buying 1", 
 
-def check_if_changed(threshold, early, late = average_price(1)):
+def check_if_changed(threshold, early, late = average_price()):
     print early
     print late
     print late + threshold
@@ -73,7 +76,8 @@ def check_if_changed(threshold, early, late = average_price(1)):
     late = average_price()
     if early >= late + threshold:
         early = average_price()
-        print "early has been updated to become", early
+        if verbos > 1:
+            print "Price threshold updated to", early
 
     if early <= late - threshold:
         early = average_price()
