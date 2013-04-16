@@ -76,12 +76,11 @@ def check_if_changed(threshold, early, late = average_price()):
     late = average_price()
     if early >= late + threshold:
         early = average_price()
-        if verbos > 1:
+        if verbose > 1:
             print "Price threshold updated to", early
-
     if early <= late - threshold:
         early = average_price()
-        print "early has been updated to become", early
+        print "Price threshold updated to", early
 
 #refreshes every <wait> seconds
 def refresh_price():
