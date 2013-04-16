@@ -16,6 +16,7 @@ nonce = (int(time.time()))
 #how many seconds to wait before refreshing price
 wait = 5
 
+#note this api key will be deleted and at no point will have trade or withdrawal rights, trying to use it will be useless
 api_key = "8E9LX6K1-JSN6HS6G-HRH2XM57-X5ULY2FV-QTQHN6XN"
 api_secret = "c4556cc5329a6fd74790ca37a48212eddaeec6c34c0b67f0ac9ea59e7c9e9d6d"
 
@@ -45,13 +46,13 @@ def average_price(v = 2):
     #price_list.appendleft(last)
     price_list.append(last)
     price_list.pop(10)
-    if verbose > 0 and v != 1:
+    if verbose > 0 and v == 1:
         print "last price checked was", average_last
-    if verbose > 1 and v != 1:
+    if verbose > 1 and v == 1:
         print "price list is", price_list
     return average_last
 
-earliest = average_price(1)
+earliest = average_price()
 early = earliest
 
 nonce = time.time()
@@ -69,7 +70,7 @@ def check_if_changed(threshold, early, late = average_price(1)):
     print late
     print late + threshold
     print late - threshold
-    late = average_price(1)
+    late = average_price()
     if early >= late + threshold:
         early = average_price()
         print "early has been updated to become", early
@@ -80,7 +81,7 @@ def check_if_changed(threshold, early, late = average_price(1)):
 
 #refreshes every <wait> seconds
 def refresh_price():
-    average_price()
+    average_price(1)
     threading.Timer(wait, refresh_price).start()
     last = get_last(pair)
     time.sleep(wait)
