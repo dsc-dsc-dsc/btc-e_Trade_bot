@@ -76,10 +76,12 @@ def check_if_changed(threshold, early, late = average_price()):
     late = average_price()
     if early >= late + threshold:
         early = average_price()
+        make_trade("buy")
         if verbose > 1:
             print "Price threshold updated to", early
     if early <= late - threshold:
         early = average_price()
+        make_trade("buy")
         print "Price threshold updated to", early
 
 #refreshes every <wait> seconds
