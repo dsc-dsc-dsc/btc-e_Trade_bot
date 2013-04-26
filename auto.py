@@ -66,7 +66,11 @@ get_balance()
 
 def make_trade(trade):
     if trade == "buy":
-        print "buying 1", 
+        print "buying 1"
+        api.trade(pair, "buy", average_last, 1)
+    if trade == "sell":
+        print "selling 1"
+        api.trade(pair, "sell", average_last, 1)
 
 def check_if_changed(threshold, early, late = average_price()):
     print early
