@@ -5,6 +5,7 @@ Uses alanmcintyre's btc-e api to automatically buy/sell a chosen currency from b
 found at: https://github.com/alanmcintyre/btce-api
 
 If this has been useful in some way, a donation to either one of the following addresses  would be appreciated:
+
     LTC:  LNNBkSyEDQZnUwV9E5GYA9eGTUrJ1zwDLS
     BTC:  19WRmGTX417vzAu2bv65QicNj54QMVn1qF
 
