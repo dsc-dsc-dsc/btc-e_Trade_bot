@@ -1,1 +1,2 @@
-Bots for auto-trading on BTC-e
+BTC-e Trade bot
+

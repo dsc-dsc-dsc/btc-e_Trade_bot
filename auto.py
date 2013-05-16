@@ -1,10 +1,11 @@
-from btceapi import common
-from btceapi import trade
-from btceapi import public
 import sys
 import collections
 import threading
 import time
+#sys.path.append(
+from btceapi.btceapi import common
+from btceapi.btceapi import trade
+from btceapi.btceapi import public
 #Value that determins how significant a change must be to make a trade
 #If value goes up or down this much in USD, a sell or buy will be attempted
 trade_threshold = 0.001
@@ -41,7 +42,7 @@ price_list = [last] * 10
 
 #sets current price by averaging last ten results of get_last
 def average_price(v = 2):
-    average_last = sum(price_list)/ float(len(price_list))
+    average_last = float(sum(price_list))/float(len(price_list))
     #price_list = collections.deque([])
     #price_list.appendleft(last)
     price_list.append(last)

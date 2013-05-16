@@ -1,3 +1,5 @@
+# Copyright (c) 2013 Alan McIntyre
+
 import datetime
 
 import common
@@ -23,8 +25,8 @@ def getDepth(pair):
     return asks, bids
     
    
-class Trade:
-    __slots__ = ('trade_type', 'price', 'tid', 'amount', 'date')
+class Trade(object):
+    __slots__ = ('pair', 'trade_type', 'price', 'tid', 'amount', 'date')
     
 def getTradeHistory(pair):
     '''Retrieve the trade history for the given pair.  Returns a list of 
@@ -44,6 +46,7 @@ def getTradeHistory(pair):
             u = unicode(s)
             setattr(t, u, h.get(u))
         t.date = datetime.datetime.fromtimestamp(t.date)
+        t.pair = pair
         result.append(t)
     return result
     
