@@ -2,11 +2,13 @@ BTC-e Trade bot
 ===============
 
 Uses alanmcintyre's btc-e api to automatically buy/sell a chosen currency from btc-e.
+found at: https://github.com/alanmcintyre/btce-api
 
-If this has been usefull in some way, a donation to either one of the following addresses  would be appreciated:
+If this has been useful in some way, a donation to either one of the following addresses  would be appreciated:
     LTC:  LNNBkSyEDQZnUwV9E5GYA9eGTUrJ1zwDLS
     BTC:  19WRmGTX417vzAu2bv65QicNj54QMVn1qF
 
+Also this:
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
