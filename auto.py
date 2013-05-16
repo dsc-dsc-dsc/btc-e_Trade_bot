@@ -8,8 +8,8 @@ from btceapi.btceapi import trade
 from btceapi.btceapi import public
 #Value that determins how significant a change must be to make a trade
 #If value goes up or down this much in USD, a sell or buy will be attempted
-trade_threshold = 0.001
-verbose = 2 #0 = only report trades or attempted trades, 1 = inform of current price 2 = relay all data collected
+trade_threshold = 0.3
+verbose = 1 #0 = only report trades or attempted trades, 1 = inform of current price 2 = relay all data collected
 
 #set nonce to current time
 nonce = (int(time.time()))
@@ -17,16 +17,15 @@ nonce = (int(time.time()))
 #how many seconds to wait before refreshing price
 wait = 5
 
-#note this api key will be deleted and at no point will have trade or withdrawal rights, trying to use it will be useless
-api_key = "8E9LX6K1-JSN6HS6G-HRH2XM57-X5ULY2FV-QTQHN6XN"
-api_secret = "c4556cc5329a6fd74790ca37a48212eddaeec6c34c0b67f0ac9ea59e7c9e9d6d"
+api_key = "API KEY HERE"
+api_secret = "API SECRET HERE"
 
 api = trade.TradeAPI(api_key, api_secret, nonce)
 
 #set what to exchange (i.e. ltc_usd for LTC to USD or btc_ltc for BTC to LTC)
-pair = "ltc_usd"
+pair = "btc_usd"
 #set these to your pair, (i.e. "btc" for first and "usd" for the second for btc_usd)
-curr1 = "balance_ltc"
+curr1 = "balance_btc"
 curr2 = "balance_usd"
 
 #gets the last trade price from btc-e
