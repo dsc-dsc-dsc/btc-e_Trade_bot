@@ -97,7 +97,7 @@ def autocancel():
         api.cancelOrder(o.order_id)
     if not orders:
         return
-autocancel()
+#autocancel()
 
 #refreshes every <wait> seconds
 def refresh_price():
