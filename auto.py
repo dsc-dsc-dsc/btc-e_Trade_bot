@@ -7,8 +7,8 @@ from btceapi.btceapi import common
 from btceapi.btceapi import trade
 from btceapi.btceapi import public
 #Value that determins how significant a change must be to make a trade
-#If value goes up or down this much in USD, a sell or buy will be attempted
-trade_threshold = 0.002
+#If price goes up or down this percent, a sell or buy will be attempted
+trade_threshold = 0.006
 verbose = 2 #0 = only report trades or attempted trades, 1 = inform of current price 2 = relay all data collected
 
 #set nonce to current time
@@ -76,15 +76,17 @@ def make_trade(trade):
 def check_if_changed(threshold, early, late = average_price()):
     print early
     print late
-    print "buying at ", late + threshold
-    print "selling at", late - threshold
+    buyprice = late + (late*threshold)
+    sellprice= late - (late*threshold)
+    print "buying at ", buyprice
+    print "selling at", sellprice
     late = average_price()
-    if early >= late + threshold:
+    if early >= buyprice:
         early = average_price()
         make_trade("buy")
         if verbose > 1:
             print "Price threshold updated to", early
-    if early <= late - threshold:
+    if early <= sellprice:
         early = average_price()
         make_trade("buy")
         print "Price threshold updated to", early
@@ -97,7 +99,7 @@ def autocancel():
         api.cancelOrder(o.order_id)
     if not orders:
         return
-autocancel()
+#autocancel()
 
 #refreshes every <wait> seconds
 def refresh_price():

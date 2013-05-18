@@ -15,7 +15,7 @@ example:
     curr1 = "balance_ltc"
     curr2 = "balance_usd"
 
-Also if you change the pair, you will need to change trade_threshold, I will make a list of suggested values for different pairs soon
+Also you may edit other variables such as trade threshold
 ### Donate
 
 If you like my bot, a donation to either one of the following addresses  would be appreciated:
