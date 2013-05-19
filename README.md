@@ -4,6 +4,12 @@ BTC-e Trade bot
 Uses alanmcintyre's btc-e api to automatically buy/sell a chosen currency from btc-e.
 found at: https://github.com/alanmcintyre/btce-api
 
+Cloning
+-------
+
+To clone the bot, you must clone with recursion i.e:
+    
+    git clone --recursive https://github.com/mcfundash/btc-e_Trade_bot.git
 
 ### Usage
 

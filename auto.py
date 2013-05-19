@@ -8,8 +8,8 @@ from btceapi.btceapi import trade
 from btceapi.btceapi import public
 #Value that determins how significant a change must be to make a trade
 #If price goes up or down this percent, a sell or buy will be attempted
-trade_threshold = 0.001
-verbose = 2 #0 = only report trades or attempted trades, 1 = inform of current price 2 = relay all data collected
+trade_threshold = 0.006
+verbose = 1 #0 = only report trades or attempted trades, 1 = inform of current price 2 = relay all data collected
 
 #set nonce to current time
 def new_nonce():
@@ -20,8 +20,8 @@ nonce = new_nonce()
 #how many seconds to wait before refreshing price
 wait = 3
 
-api_key = "71SY15XS-8PUQHY79-F1VSJ8QH-Q3NU2EVP-FG200TDD"
-api_secret = "71SY15XS-8PUQHY79-F1VSJ8QH-Q3NU2EVP-FG200TDD"
+api_key = "API KEY HERE"
+api_secret = "API SECRET HERE"
 
 api = trade.TradeAPI(api_key, api_secret, nonce)
 
@@ -73,29 +73,29 @@ def get_balance(get1 = False, get2 = False):
 
 def make_trade(trade):
     if trade == "buy":
-        print "buying 0.5"
+        print "buying 1"
         api.trade(pair, "buy", last, 1)
     if trade == "sell":
-        print "selling 0.5"
+        print "selling 1"
         api.trade(pair, "sell", last, 1)
-make_trade("sell")
-def check_if_changed(threshold, early, late = average_price()):
-    print early
+#make_trade("sell")
+def check_if_changed(threshold, late):
+    #print early
     print late
     buyprice = late + (late*threshold)
     sellprice= late - (late*threshold)
     print "will buy at ", buyprice
     print "will sell at", sellprice
-    late = average_price()
-    if early < buyprice:
+    #late = average_price()
+    if average_price() > buyprice:
         print buyprice, "reached"
-        early = average_price()
+        late = average_price()
         make_trade("buy")
         if verbose > 1:
             print "Price threshold updated to", early
-    if early > sellprice:
+    if average_price() < sellprice:
         print sellprice, "reached"
-        early = average_price()
+        late = average_price()
         make_trade("sell")
         print "Price threshold updated to", early
     if verbose > 0:
@@ -120,7 +120,7 @@ def refresh_price():
     price_list.insert(0, last)
     price_list.pop()
     nonce = new_nonce()
-    check_if_changed(trade_threshold, earliest)
+    check_if_changed(trade_threshold, last)
     if verbose > 1:
         print "Last price retrieved was", last
-#refresh_price()
+refresh_price()
