@@ -8,17 +8,20 @@ from btceapi.btceapi import trade
 from btceapi.btceapi import public
 #Value that determins how significant a change must be to make a trade
 #If price goes up or down this percent, a sell or buy will be attempted
-trade_threshold = 0.006
+trade_threshold = 0.001
 verbose = 2 #0 = only report trades or attempted trades, 1 = inform of current price 2 = relay all data collected
 
 #set nonce to current time
-nonce = (int(time.time()))
+def new_nonce():
+    nonce = int(time.time())
+    return nonce
+nonce = new_nonce()
 
 #how many seconds to wait before refreshing price
-wait = 10
+wait = 3
 
-api_key = "API KEY HERE"
-api_secret = "API SECRET HERE"
+api_key = "71SY15XS-8PUQHY79-F1VSJ8QH-Q3NU2EVP-FG200TDD"
+api_secret = "71SY15XS-8PUQHY79-F1VSJ8QH-Q3NU2EVP-FG200TDD"
 
 api = trade.TradeAPI(api_key, api_secret, nonce)
 
@@ -34,7 +37,7 @@ def get_last(pair):
     ticker = tickerW.get(u'ticker')
     last_price = ticker.get(u'last')
     return last_price
-last = get_last(pair)
+last = float(get_last(pair))
 
 #initializes 10 element list of prices with first last as value for each element
 price_list = [last] * 10
@@ -43,11 +46,11 @@ price_list = [last] * 10
 def average_price(v = 2):
     #price_list = collections.deque([])
     #price_list.appendleft(last)
-    price_list.append(last)
-    price_list.pop(10)
+    #price_list.append(last)
+    #price_list.pop(10)
     average_last = float(sum(price_list))/float(len(price_list))
-    if verbose > 0 and v == 1:
-        print "last price checked was", average_last
+    #if verbose > 0 and v == 1:
+    #    print "last price checked was", average_last
     if verbose > 1 and v == 1:
         print "price list is", price_list
     return average_last
@@ -57,39 +60,46 @@ early = earliest
 
 nonce = time.time()
 
-#get balance information, going to add more from this later 
-def get_balance():
+#get balance information, assign balance of first pair to 
+def get_balance(get1 = False, get2 = False):
     account_info = vars(api.getInfo())
     bal1 = account_info[curr1]
     bal2 = account_info[curr2]
-    print bal1, bal2
+    if get1 == True:
+        return bal1
+    if get2 == True:
+        return bal2
 #get_balance()
 
 def make_trade(trade):
     if trade == "buy":
-        print "buying 1"
-        api.trade(pair, "buy", earliest, 1)
+        print "buying 0.5"
+        api.trade(pair, "buy", last, 1)
     if trade == "sell":
-        print "selling 1"
-        api.trade(pair, "sell", earliest, 1)
-
+        print "selling 0.5"
+        api.trade(pair, "sell", last, 1)
+make_trade("sell")
 def check_if_changed(threshold, early, late = average_price()):
     print early
     print late
     buyprice = late + (late*threshold)
     sellprice= late - (late*threshold)
-    print "buying at ", buyprice
-    print "selling at", sellprice
+    print "will buy at ", buyprice
+    print "will sell at", sellprice
     late = average_price()
-    if early >= buyprice:
+    if early < buyprice:
+        print buyprice, "reached"
         early = average_price()
         make_trade("buy")
         if verbose > 1:
             print "Price threshold updated to", early
-    if early <= sellprice:
+    if early > sellprice:
+        print sellprice, "reached"
         early = average_price()
-        make_trade("buy")
+        make_trade("sell")
         print "Price threshold updated to", early
+    if verbose > 0:
+        print "last price checked was", average_price()
 
 #function to cancel orders that havn't been filled for awhile, not complete
 def autocancel():
@@ -103,14 +113,14 @@ def autocancel():
 
 #refreshes every <wait> seconds
 def refresh_price():
-    average_price(1)
     threading.Timer(wait, refresh_price).start()
-    last = get_last(pair)
     time.sleep(wait)
+    last = float(get_last(pair))
+    average_price(1)
     price_list.insert(0, last)
     price_list.pop()
-    nonce = (int(time.time()))
+    nonce = new_nonce()
     check_if_changed(trade_threshold, earliest)
     if verbose > 1:
         print "Last price retrieved was", last
-refresh_price()
+#refresh_price()
