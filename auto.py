@@ -57,13 +57,13 @@ early = earliest
 
 nonce = time.time()
 
-#get balance information, assign balance of first pair to 
+#get balance information, going to add more from this later 
 def get_balance():
     account_info = vars(api.getInfo())
     bal1 = account_info[curr1]
     bal2 = account_info[curr2]
     print bal1, bal2
-get_balance()
+#get_balance()
 
 def make_trade(trade):
     if trade == "buy":
