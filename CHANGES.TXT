@@ -1,2 +1,5 @@
+Version Beta 0.1.1:
+    -Actual working release, this is tested to work, if it works well is to be discovered.
+
 Version Beta 0.1:
     -Initial working release
