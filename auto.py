@@ -72,19 +72,21 @@ def get_balance(get1 = False, get2 = False):
 #get_balance()
 
 def make_trade(trade):
+    price = average_price()
     if trade == "buy":
         print "buying 1"
-        api.trade(pair, "buy", last, 1)
+        api.trade(pair, "buy", price, 1)
     if trade == "sell":
         print "selling 1"
-        api.trade(pair, "sell", last, 1)
+        api.trade(pair, "sell", price, 1)
 #make_trade("sell")
 
 early = average_price()
-def check_if_changed(threshold, late, early = early):
+def check_if_changed(threshold, late):
+    global early
     #print early
     print late
-    print early
+    print early, "early"
     buyprice = early + (early*threshold)
     sellprice= early - (early*threshold)
     print "will buy at ", buyprice
@@ -95,17 +97,22 @@ def check_if_changed(threshold, late, early = early):
         late = average_price()
         early = late
         make_trade("buy")
+        check_if_changed(trade_threshold, get_last(pair))
         if verbose > 1:
             print "Price threshold updated to", early
-    if average_price() < sellprice:
+    elif average_price() < sellprice:
         print sellprice, "reached"
         late = average_price()
         early = late
+        print early, "early"
         make_trade("sell")
+        check_if_changed(trade_threshold, get_last(pair))
         print "Price threshold updated to", early
+    else:
+        print "Not enough change to buy/sell yet"
     if verbose > 0:
         print "last price checked was", average_price()
-
+check_if_changed(trade_threshold, last)
 #function to cancel orders that havn't been filled for awhile, not complete
 def autocancel():
     orders = api.orderList(pair = pair)
