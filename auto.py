@@ -20,8 +20,8 @@ nonce = new_nonce()
 #how many seconds to wait before refreshing price
 wait = 10
 
-api_key = "56T7XXKD-1FG0B2HV-HLWIKX5M-CB3M8ZUY-8KOJUMWN"
-api_secret = "67f91cc69515924bd824614765bb7ed42a186f0acde2c7acb18787845712b4a4"
+api_key = "API KEY HERE"
+api_secret = "API SECRET HERE"
 
 api = trade.TradeAPI(api_key, api_secret, nonce)
 
