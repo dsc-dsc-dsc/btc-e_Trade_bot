@@ -26,7 +26,7 @@ api_secret = "67f91cc69515924bd824614765bb7ed42a186f0acde2c7acb18787845712b4a4"
 api = trade.TradeAPI(api_key, api_secret, nonce)
 
 #set what to exchange (i.e. ltc_usd for LTC to USD or btc_ltc for BTC to LTC)
-pair = "ltc_btc"
+pair = "btc_usd"
 #set these to your pair, (i.e. "btc" for first and "usd" for the second for btc_usd)
 curr1 = "balance_ltc"
 curr2 = "balance_btc"
@@ -74,45 +74,39 @@ def get_balance(get1 = False, get2 = False):
 def make_trade(trade):
     price = average_price()
     if trade == "buy":
-        print "buying 0.1"
-        api.trade(pair, "buy", price, 0.1)
+        print "buying 0.01"
+        api.trade(pair, "buy", price, 0.01)
     if trade == "sell":
-        print "selling 0.1"
-        api.trade(pair, "sell", price, 0.1)
+        print "selling 0.01"
+        api.trade(pair, "sell", price, 0.01)
 #make_trade("sell")
 
 early = average_price()
-def check_if_changed(threshold, late):
-    global early
+def check_if_changed(threshold, late, early = early):
     #print early
     print late
-    print early, "early"
-    buyprice = early - (early*threshold)
-    sellprice= early + (early*threshold)
+    print early
+    buyprice = early + (early*threshold)
+    sellprice= early - (early*threshold)
     print "will buy at ", buyprice
     print "will sell at", sellprice
     #late = average_price()
-    if average_price() < buyprice:
+    if average_price() > buyprice:
         print buyprice, "reached"
         late = average_price()
         early = late
         make_trade("buy")
-        check_if_changed(trade_threshold, get_last(pair))
         if verbose > 1:
             print "Price threshold updated to", early
-    elif average_price() > sellprice:
+    if average_price() < sellprice:
         print sellprice, "reached"
         late = average_price()
         early = late
-        print early, "early"
         make_trade("sell")
-        check_if_changed(trade_threshold, get_last(pair))
         print "Price threshold updated to", early
-    else:
-        print "Not enough change to buy/sell yet"
     if verbose > 0:
         print "last price checked was", average_price()
-check_if_changed(trade_threshold, last)
+
 #function to cancel orders that havn't been filled for awhile, not complete
 def autocancel():
     orders = api.orderList(pair = pair)

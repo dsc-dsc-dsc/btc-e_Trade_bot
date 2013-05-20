@@ -87,12 +87,12 @@ def check_if_changed(threshold, late):
     #print early
     print late
     print early, "early"
-    buyprice = early - (early*threshold)
-    sellprice= early + (early*threshold)
+    buyprice = early + (early*threshold)
+    sellprice= early - (early*threshold)
     print "will buy at ", buyprice
     print "will sell at", sellprice
     #late = average_price()
-    if average_price() < buyprice:
+    if average_price() > buyprice:
         print buyprice, "reached"
         late = average_price()
         early = late
@@ -100,7 +100,7 @@ def check_if_changed(threshold, late):
         check_if_changed(trade_threshold, get_last(pair))
         if verbose > 1:
             print "Price threshold updated to", early
-    elif average_price() > sellprice:
+    elif average_price() < sellprice:
         print sellprice, "reached"
         late = average_price()
         early = late

@@ -20,13 +20,13 @@ nonce = new_nonce()
 #how many seconds to wait before refreshing price
 wait = 10
 
-api_key = "56T7XXKD-1FG0B2HV-HLWIKX5M-CB3M8ZUY-8KOJUMWN"
-api_secret = "67f91cc69515924bd824614765bb7ed42a186f0acde2c7acb18787845712b4a4"
+api_key = "R9SESU4W-Y0VIBJ6Z-NNCGSSTM-XHDILYY0-006C7KUW"
+api_secret = "e7325ae1dc967d8173aa04ddf61675c5c8161b8028be824377c9aa952bb75882"
 
 api = trade.TradeAPI(api_key, api_secret, nonce)
 
 #set what to exchange (i.e. ltc_usd for LTC to USD or btc_ltc for BTC to LTC)
-pair = "ltc_btc"
+pair = "ltc_usd"
 #set these to your pair, (i.e. "btc" for first and "usd" for the second for btc_usd)
 curr1 = "balance_ltc"
 curr2 = "balance_btc"
@@ -82,37 +82,31 @@ def make_trade(trade):
 #make_trade("sell")
 
 early = average_price()
-def check_if_changed(threshold, late):
-    global early
+def check_if_changed(threshold, late, early = early):
     #print early
     print late
-    print early, "early"
-    buyprice = early - (early*threshold)
-    sellprice= early + (early*threshold)
+    print early
+    buyprice = early + (early*threshold)
+    sellprice= early - (early*threshold)
     print "will buy at ", buyprice
     print "will sell at", sellprice
     #late = average_price()
-    if average_price() < buyprice:
+    if average_price() > buyprice:
         print buyprice, "reached"
         late = average_price()
         early = late
         make_trade("buy")
-        check_if_changed(trade_threshold, get_last(pair))
         if verbose > 1:
             print "Price threshold updated to", early
-    elif average_price() > sellprice:
+    if average_price() < sellprice:
         print sellprice, "reached"
         late = average_price()
         early = late
-        print early, "early"
         make_trade("sell")
-        check_if_changed(trade_threshold, get_last(pair))
         print "Price threshold updated to", early
-    else:
-        print "Not enough change to buy/sell yet"
     if verbose > 0:
         print "last price checked was", average_price()
-check_if_changed(trade_threshold, last)
+
 #function to cancel orders that havn't been filled for awhile, not complete
 def autocancel():
     orders = api.orderList(pair = pair)

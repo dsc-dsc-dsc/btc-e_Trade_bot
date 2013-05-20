@@ -13,7 +13,6 @@ example:
     pair = "ltc_usd"
 
 Also you may edit other variables such as trade threshold
-The testing folder is for testing releases that may or may not be working, try them at your own risk
 ### Donate
 
 If you like my bot, a donation to either one of the following addresses  would be appreciated:

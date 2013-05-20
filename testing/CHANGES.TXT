@@ -1,0 +1,8 @@
+Version Beta 0.1.2:
+    -fixed threshold prices not updating
+
+Version Beta 0.1.1:
+    -Actual working release, this is tested to work, if it works well is to be discovered.
+
+Version Beta 0.1:
+    -Initial working release
