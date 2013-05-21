@@ -8,20 +8,17 @@ from btceapi.btceapi import trade
 from btceapi.btceapi import public
 #Value that determins how significant a change must be to make a trade
 #If price goes up or down this percent, a sell or buy will be attempted
-trade_threshold = 0.006
+trade_threshold = 0.005
 verbose = 3 #0 = only report trades or attempted trades, 1 = inform of current price 2 = relay all data collected
+tradex = 0.5  #Amount to trade at
 
-#set nonce to current time
-def new_nonce():
-    nonce = int(time.time())
-    return nonce
 nonce = new_nonce()
 
 #how many seconds to wait before refreshing price
 wait = 10
 
-api_key = "56T7XXKD-1FG0B2HV-HLWIKX5M-CB3M8ZUY-8KOJUMWN"
-api_secret = "67f91cc69515924bd824614765bb7ed42a186f0acde2c7acb18787845712b4a4"
+api_key = "API KEY HERE"
+api_secret = "API SECRET HERE"
 
 api = trade.TradeAPI(api_key, api_secret, nonce)
 
@@ -34,7 +31,12 @@ curr2 = "balance_btc"
 #earliest = average_price()
 #early = earliest
 
-nonce = time.time()
+#nonce = time.time()
+
+#set nonce to current time
+def new_nonce():
+    nonce = int(time.time())
+    return nonce
 
 #gets the last trade price from btc-e
 def get_last(pair):
@@ -71,14 +73,14 @@ def get_balance(get1 = False, get2 = False):
         return bal2
 #get_balance()
 
-def make_trade(trade):
+def make_trade(trade, tradex = tradex):
     price = average_price()
     if trade == "buy":
-        print "buying 0.1"
-        api.trade(pair, "buy", price, 0.1)
+        print "buying", tradex
+        api.trade(pair, "buy", price, tradex)
     if trade == "sell":
-        print "selling 0.1"
-        api.trade(pair, "sell", price, 0.1)
+        print "selling", tradex
+        api.trade(pair, "sell", price, tradex)
 #make_trade("sell")
 
 early = average_price()
