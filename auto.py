@@ -12,7 +12,7 @@ trade_threshold = 0.005
 verbose = 3 #0 = only report trades or attempted trades, 1 = inform of current price 2 = relay all data collected
 tradex = 0.5  #Amount to trade at
 
-nonce = new_nonce()
+#nonce = new_nonce()
 
 #how many seconds to wait before refreshing price
 wait = 10
@@ -20,7 +20,6 @@ wait = 10
 api_key = "API KEY HERE"
 api_secret = "API SECRET HERE"
 
-api = trade.TradeAPI(api_key, api_secret, nonce)
 
 #set what to exchange (i.e. ltc_usd for LTC to USD or btc_ltc for BTC to LTC)
 pair = "ltc_btc"
@@ -37,7 +36,9 @@ curr2 = "balance_btc"
 def new_nonce():
     nonce = int(time.time())
     return nonce
+nonce = new_nonce()
 
+api = trade.TradeAPI(api_key, api_secret, nonce)
 #gets the last trade price from btc-e
 def get_last(pair):
     tickerW = common.makeJSONRequest("/api/2/%s/ticker" % pair)
