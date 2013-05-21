@@ -1,3 +1,6 @@
+Version Beta 0.1.2.1/2
+    -changed trading algo
+
 Version Beta 0.1.2:
     -fixed threshold prices not updating
 
