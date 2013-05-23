@@ -8,7 +8,7 @@ from btceapi.btceapi import trade
 from btceapi.btceapi import public
 #Value that determins how significant a change must be to make a trade
 #If price goes up or down this percent, a sell or buy will be attempted
-trade_threshold = 0.005
+trade_threshold = 0.003
 verbose = 3 #0 = only report trades or attempted trades, 1 = inform of current price 2 = relay all data collected
 tradex = 0.5  #Amount to trade at
 
@@ -20,13 +20,15 @@ wait = 10
 api_key = "API KEY HERE"
 api_secret = "API SECRET HERE"
 
-
 #set what to exchange (i.e. ltc_usd for LTC to USD or btc_ltc for BTC to LTC)
 pair = "ltc_btc"
 #set these to your pair, (i.e. "btc" for first and "usd" for the second for btc_usd)
-curr1 = "balance_ltc"
-curr2 = "balance_btc"
-
+curr1 = 'balance_'
+curr1 += pair[:3]
+print curr1
+curr2 = 'balance_'
+curr2 += pair[4:]
+print curr2
 #earliest = average_price()
 #early = earliest
 
@@ -64,15 +66,15 @@ def average_price(v = 2):
     return average_last
 
 #get balance information, assign balance of first pair to 
-def get_balance(get1 = False, get2 = False):
+def get_balance(get):
     account_info = vars(api.getInfo())
     bal1 = account_info[curr1]
     bal2 = account_info[curr2]
-    if get1 == True:
+    if get == 1:
         return bal1
-    if get2 == True:
+    if get == 2:
         return bal2
-#get_balance()
+#print get_balance(True, True)
 
 def make_trade(trade, tradex = tradex):
     price = average_price()
@@ -91,12 +93,15 @@ def check_if_changed(threshold, late):
     print late
     print early, "early"
     buyprice = early - (early*threshold)
-    sellprice= early + (early*threshold)
+    sellprice= early + (early*threshold) + (early*0.001)
     print "will buy at ", buyprice
     print "will sell at", sellprice
     #late = average_price()
     if average_price() < buyprice:
         print buyprice, "reached"
+        if get_balance(2) < tradex:
+            print "Not enough in account to buy with"
+            return
         late = average_price()
         early = late
         make_trade("buy")
@@ -105,6 +110,9 @@ def check_if_changed(threshold, late):
             print "Price threshold updated to", early
     elif average_price() > sellprice:
         print sellprice, "reached"
+        if get_balance(1) < tradex:
+            print "Not enough in account to sell"
+            return
         late = average_price()
         early = late
         print early, "early"
