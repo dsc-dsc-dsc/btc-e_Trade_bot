@@ -6,12 +6,7 @@ found at: https://github.com/alanmcintyre/btce-api
 
 ### Usage
 
-To use the bot, just put your api key and secret into api_key and api_secret in auto.py, then run it with python 2.7
-also trading pair may be selected (ltc_btc used by defualt). Just edit pair.
-example:
-    
-    pair = "ltc_usd"
-
+To use the bot, just put your api key and secret into the config file, then run auto.py with python 2.7
 Also you may edit other variables such as trade threshold
 The testing folder is for testing releases that may or may not be working, try them at your own risk
 ### Donate
