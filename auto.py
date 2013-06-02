@@ -9,18 +9,27 @@ from btceapi.btceapi import trade
 from btceapi.btceapi import public
 #Value that determins how significant a change must be to make a trade
 #If price goes up or down this percent, a sell or buy will be attempted
+<<<<<<< HEAD
 trade_threshold = config.Threshold
 verbose = config.Verbosity #0 = only report trades or attempted trades, 1 = inform of current price 2 = relay all data collected
 tradex = config.Trade_Amount  #Amount to trade at
+=======
+trade_threshold = 0.003
+verbose = 3 #0 = only report trades or attempted trades, 1 = inform of current price 2 = relay all data collected
+tradex = 0.5  #Amount to trade at
+>>>>>>> ca4c57ac081ae7ddd1afd4bcc38d8c8095472d45
 
 #nonce = new_nonce()
 
 #how many seconds to wait before refreshing price
 wait = config.Refresh
 
+<<<<<<< HEAD
 api_key = config.API_KEY
 api_secret = config.API_SECRET
 
+=======
+>>>>>>> ca4c57ac081ae7ddd1afd4bcc38d8c8095472d45
 #set what to exchange (i.e. ltc_usd for LTC to USD or btc_ltc for BTC to LTC)
 pair = config.Pair
 #set these to your pair, (i.e. "btc" for first and "usd" for the second for btc_usd)
@@ -101,9 +110,14 @@ def check_if_changed(threshold, late):
     #late = average_price()
     if average_price() < buyprice:
         print buyprice, "reached"
+<<<<<<< HEAD
         if get_balance(2) < tradex*average_price():
             print "Not enough in account to buy with"
             print get_balance(2)
+=======
+        if get_balance(2) < tradex:
+            print "Not enough in account to buy with"
+>>>>>>> ca4c57ac081ae7ddd1afd4bcc38d8c8095472d45
             return
         late = average_price()
         early = late
@@ -115,7 +129,10 @@ def check_if_changed(threshold, late):
         print sellprice, "reached"
         if get_balance(1) < tradex:
             print "Not enough in account to sell"
+<<<<<<< HEAD
             print get_balance(2)
+=======
+>>>>>>> ca4c57ac081ae7ddd1afd4bcc38d8c8095472d45
             return
         late = average_price()
         early = late
