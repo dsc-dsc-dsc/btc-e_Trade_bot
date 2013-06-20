@@ -1,3 +1,6 @@
+Version Beta 0.1.5:
+    -updated config file to be more clear
+
 Version Beta 0.1.4:
     -Added seperate Config file
     -Added balance checking
