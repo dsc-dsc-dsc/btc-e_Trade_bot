@@ -15,6 +15,7 @@ If you like my bot, a donation to either one of the following addresses  would b
 
     LTC:  LNNBkSyEDQZnUwV9E5GYA9eGTUrJ1zwDLS
     BTC:  19WRmGTX417vzAu2bv65QicNj54QMVn1qF
+    Or send a BTC-E code to me (mcfundash) on btc-e! (recommended)
 
 ### Legal
 
