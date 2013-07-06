@@ -6,18 +6,21 @@ API_SECRET=""
 #OPTIONAL SETTINGS
 #THESE SHOULD BE LEFT TO DEFAULTS UNLESS YOU KNOW WHAT YOU ARE DOING
 
-Trade_Amount=0.5
+Trade_Amount=0.1
 #Amount of currency traded/bought each transaction
 
 Threshold=0.006
 #Percent of change required to buy/sell.  Default is 0.6%
 
-Pair="btc_usd"
+Pair="ltc_btc"
 #Currency pair to trade in, may be set to anything listed on btc-e
 
-Refresh=10
+Refresh=5
 #How often to refresh in seconds
 
-Verbosity=1
+Simulation="off"
+#set to either "on" or "off" (off be default)
+
+Verbosity=5
 #How verbose the porgram is, somewhat broken at the moment,
 #will be perfected in later releases

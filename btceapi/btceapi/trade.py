@@ -113,7 +113,7 @@ class TradeAPI(object):
         self.handler = handler
 
         if self.handler is None:
-            warnings.warn("Using TradeAPI without a key handler will be deprecated soon.")
+            #warnings.warn("Using TradeAPI without a key handler will be deprecated soon.")
             self.secret = secret
             self.nonce = nonce
         else:

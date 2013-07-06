@@ -1,6 +1,5 @@
 import sys
 import collections
-import threading
 import time
 import config
 #sys.path.append(
@@ -12,9 +11,9 @@ from btceapi.btceapi import public
 trade_threshold = config.Threshold
 verbose = config.Verbosity #0 = only report trades or attempted trades, 1 = inform of current price 2 = relay all data collected
 tradex = config.Trade_Amount  #Amount to trade at
-
+#TLog = open('TradeLog','w')
 #nonce = new_nonce()
-
+SimMode = config.Simulation
 #how many seconds to wait before refreshing price
 wait = config.Refresh
 
@@ -26,14 +25,22 @@ pair = config.Pair
 #set these to your pair, (i.e. "btc" for first and "usd" for the second for btc_usd)
 curr1 = 'balance_'
 curr1 += pair[:3]
-print curr1
+#print curr1
 curr2 = 'balance_'
 curr2 += pair[4:]
-print curr2
+#print curr2
 #earliest = average_price()
 #early = earliest
 
 #nonce = time.time()
+
+if SimMode == "off":
+    print "Simulation off"
+elif SimMode == "on":
+    print "Simulation on"
+else:
+    print "Simulation not correctly set, please check config file"
+    exit()
 
 #set nonce to current time
 def new_nonce():
@@ -71,20 +78,33 @@ def get_balance(get):
     account_info = vars(api.getInfo())
     bal1 = account_info[curr1]
     bal2 = account_info[curr2]
+    if SimMode == "on":
+        return 99999
     if get == 1:
         return bal1
     if get == 2:
         return bal2
 #print get_balance(True, True)
-
 def make_trade(trade, tradex = tradex):
+    TLog = open('TradeLog.txt', 'a')
     price = average_price()
+    tradeInfo = str(trade) +","+  str(price)
+    tradeInfo = str(tradeInfo) + "\n"
+    print tradeInfo
     if trade == "buy":
         print "buying", tradex
-        api.trade(pair, "buy", price, tradex)
+        if SimMode == "on":
+            api.trade(pair, "buy", price, tradex)
+        TLog.write(tradeInfo)
+        print "writing", tradeInfo
+        TLog.close()
     if trade == "sell":
         print "selling", tradex
-        api.trade(pair, "sell", price, tradex)
+        TLog.write(tradeInfo)
+        print "writing", tradeInfo
+        TLog.close()
+        if SimMode == "off":
+            api.trade(pair, "sell", price, tradex)
 #make_trade("sell")
 
 early = average_price()
@@ -104,6 +124,7 @@ def check_if_changed(threshold, late):
         if get_balance(2) < tradex*average_price():
             print "Not enough in account to buy with"
             print get_balance(2)
+            #make_trade("buy")
             return
         late = average_price()
         early = late
@@ -116,6 +137,7 @@ def check_if_changed(threshold, late):
         if get_balance(1) < tradex:
             print "Not enough in account to sell"
             print get_balance(2)
+            #make_trade("sell")
             return
         late = average_price()
         early = late
@@ -128,20 +150,32 @@ def check_if_changed(threshold, late):
     if verbose > 0:
         print "last price checked was", average_price()
 check_if_changed(trade_threshold, last)
+
 #function to cancel orders that havn't been filled for awhile, not complete
-def autocancel():
-    orders = api.orderList(pair = pair)
-    #print orders
-    for o in orders:
-        api.cancelOrder(o.order_id)
-    if not orders:
-        return
+#Work in progress, not sure if I'll even end up implementing it at all
+#def autocancel():
+#    orders = api.orderList(pair = pair)
+#    #print orders
+#    for o in orders:
+#        api.cancelOrder(o.order_id)
+#    if not orders:
+#        return
 #autocancel()
+#xxx = 1
+#def incr():
+#    global xxx 
+#    xxx += 1
+#
+#def incr2():
+#    if xxx == 10:
+#        return xxx
+#    else:
+#        return 1
 
 #refreshes every <wait> seconds
 def refresh_price():
-    threading.Timer(wait, refresh_price).start()
-    time.sleep(wait)
+    #TLog.open('TradeLog','w')
+    #    if xxx != 10:
     last = float(get_last(pair))
     average_price(1)
     price_list.insert(0, last)
@@ -150,4 +184,7 @@ def refresh_price():
     check_if_changed(trade_threshold, last)
     if verbose > 1:
         print "Last price retrieved was", last
-refresh_price()
+    #f.close()
+    time.sleep(wait)
+while True:
+    refresh_price()
