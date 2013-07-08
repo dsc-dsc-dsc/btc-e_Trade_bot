@@ -93,7 +93,7 @@ def make_trade(trade, tradex = tradex):
     print tradeInfo
     if trade == "buy":
         print "buying", tradex
-        if SimMode == "on":
+        if SimMode == "off":
             api.trade(pair, "buy", price, tradex)
         TLog.write(tradeInfo)
         print "writing", tradeInfo
