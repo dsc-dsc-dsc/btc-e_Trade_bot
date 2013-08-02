@@ -1,38 +1,38 @@
-import sys
-import collections
 import time
 import config
-#sys.path.append(
 from btceapi.btceapi import common
 from btceapi.btceapi import trade
 from btceapi.btceapi import public
-#Value that determins how significant a change must be to make a trade
+
+#Value that determines how significant a change must be to make a trade
 #If price goes up or down this percent, a sell or buy will be attempted
 trade_threshold = config.Threshold
-verbose = config.Verbosity #0 = only report trades or attempted trades, 1 = inform of current price 2 = relay all data collected
-tradex = config.Trade_Amount  #Amount to trade at
-#TLog = open('TradeLog','w')
-#nonce = new_nonce()
+
+#0 = only report trades or attempted trades, 1 = inform of current price 2 = relay all data collected
+verbose = config.Verbosity 
+
+#Amount to trade at
+tradex = config.Trade_Amount
+
 SimMode = config.Simulation
+
 #how many seconds to wait before refreshing price
 wait = config.Refresh
 
 api_key = config.API_KEY
 api_secret = config.API_SECRET
 
-#set what to exchange (i.e. ltc_usd for LTC to USD or btc_ltc for BTC to LTC)
+#currency pairing i.e. btc/usd, btc/ltc etc.
 pair = config.Pair
+
 #set these to your pair, (i.e. "btc" for first and "usd" for the second for btc_usd)
 curr1 = 'balance_'
 curr1 += pair[:3]
-#print curr1
 curr2 = 'balance_'
 curr2 += pair[4:]
-#print curr2
+
 #earliest = average_price()
 #early = earliest
-
-#nonce = time.time()
 
 if SimMode == "off":
     print "Simulation off"
@@ -62,10 +62,6 @@ price_list = [last] * 10
 
 #sets current price by averaging last ten results of get_last
 def average_price(v = 2):
-    #price_list = collections.deque([])
-    #price_list.appendleft(last)
-    #price_list.append(last)
-    #price_list.pop(10)
     average_last = float(sum(price_list))/float(len(price_list))
     #if verbose > 0 and v == 1:
     #    print "last price checked was", average_last
@@ -84,7 +80,7 @@ def get_balance(get):
         return bal1
     if get == 2:
         return bal2
-#print get_balance(True, True)
+
 def make_trade(trade, tradex = tradex):
     TLog = open('TradeLog.txt', 'a')
     price = average_price()
@@ -105,26 +101,20 @@ def make_trade(trade, tradex = tradex):
         TLog.close()
         if SimMode == "off":
             api.trade(pair, "sell", price, tradex)
-#make_trade("sell")
 
-early = average_price()
 def check_if_changed(threshold, late):
-    global early
-    #print early
+    early = average_price()    
     print late
     print early, "early"
     print average_price()
     buyprice = early - (early*threshold)
     sellprice= early + (early*threshold) + (early*0.001)
-    print "will buy at ", buyprice
-    print "will sell at", sellprice
-    #late = average_price()
+    print "BUYING AT", buyprice
+    print "SELLING AT", sellprice
     if average_price() < buyprice:
         print buyprice, "reached"
         if get_balance(2) < tradex*average_price():
-            print "Not enough in account to buy with"
-            print get_balance(2)
-            #make_trade("buy")
+            print tradex*average_price()-get_balance(2), "needed to buy"
             return
         late = average_price()
         early = late
@@ -135,9 +125,7 @@ def check_if_changed(threshold, late):
     elif average_price() > sellprice:
         print sellprice, "reached"
         if get_balance(1) < tradex:
-            print "Not enough in account to sell"
-            print get_balance(2)
-            #make_trade("sell")
+            print tradex-get_balance(1), "needed to sell"
             return
         late = average_price()
         early = late
@@ -161,21 +149,9 @@ check_if_changed(trade_threshold, last)
 #    if not orders:
 #        return
 #autocancel()
-#xxx = 1
-#def incr():
-#    global xxx 
-#    xxx += 1
-#
-#def incr2():
-#    if xxx == 10:
-#        return xxx
-#    else:
-#        return 1
 
 #refreshes every <wait> seconds
 def refresh_price():
-    #TLog.open('TradeLog','w')
-    #    if xxx != 10:
     last = float(get_last(pair))
     average_price(1)
     price_list.insert(0, last)
@@ -184,7 +160,6 @@ def refresh_price():
     check_if_changed(trade_threshold, last)
     if verbose > 1:
         print "Last price retrieved was", last
-    #f.close()
     time.sleep(wait)
 while True:
     refresh_price()
