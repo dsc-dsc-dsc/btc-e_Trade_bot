@@ -105,26 +105,19 @@ def make_trade(trade, tradex = tradex):
         TLog.close()
         if SimMode == "off":
             api.trade(pair, "sell", price, tradex)
-#make_trade("sell")
 
 early = average_price()
 def check_if_changed(threshold, late):
     global early
-    #print early
-    print late
-    print early, "early"
-    print average_price()
     buyprice = early - (early*threshold)
     sellprice= early + (early*threshold) + (early*0.001)
     print "will buy at ", buyprice
     print "will sell at", sellprice
-    #late = average_price()
     if average_price() < buyprice:
         print buyprice, "reached"
         if get_balance(2) < tradex*average_price():
             print "Not enough in account to buy with"
             print get_balance(2)
-            #make_trade("buy")
             return
         late = average_price()
         early = late
@@ -137,7 +130,6 @@ def check_if_changed(threshold, late):
         if get_balance(1) < tradex:
             print "Not enough in account to sell"
             print get_balance(1)
-            #make_trade("sell")
             return
         late = average_price()
         early = late
@@ -151,28 +143,6 @@ def check_if_changed(threshold, late):
         print "last price checked was", average_price()
 check_if_changed(trade_threshold, last)
 
-#function to cancel orders that havn't been filled for awhile, not complete
-#Work in progress, not sure if I'll even end up implementing it at all
-#def autocancel():
-#    orders = api.orderList(pair = pair)
-#    #print orders
-#    for o in orders:
-#        api.cancelOrder(o.order_id)
-#    if not orders:
-#        return
-#autocancel()
-#xxx = 1
-#def incr():
-#    global xxx 
-#    xxx += 1
-#
-#def incr2():
-#    if xxx == 10:
-#        return xxx
-#    else:
-#        return 1
-
-#refreshes every <wait> seconds
 def refresh_price():
     #TLog.open('TradeLog','w')
     #    if xxx != 10:
