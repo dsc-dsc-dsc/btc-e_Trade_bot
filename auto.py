@@ -136,7 +136,7 @@ def check_if_changed(threshold, late):
         print sellprice, "reached"
         if get_balance(1) < tradex:
             print "Not enough in account to sell"
-            print get_balance(2)
+            print get_balance(1)
             #make_trade("sell")
             return
         late = average_price()
