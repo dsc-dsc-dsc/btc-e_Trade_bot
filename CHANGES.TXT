@@ -1,8 +1,8 @@
 8.2.2013
      -Removed extraneous comments
      -Modified a few print statements
+     -Implemented autocancel() for aging orders
 
-OLD CHANGES
 Version Beta 0.1.6:
     -added Trade log to text file
     -added simulation mode
