@@ -1,3 +1,4 @@
 config.py
 *.pyc
 TradeLog.txt
+btceapi/*
