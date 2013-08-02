@@ -138,8 +138,8 @@ def check_if_changed(threshold, late):
         make_trade("sell")
         check_if_changed(trade_threshold, get_last(pair))
         print "Price threshold updated to", early
-    else:
-        print "Not enough change to buy/sell yet"
+#    else:
+#        print "Not enough change to buy/sell yet"
     if verbose > 0:
         print "last price checked was", average_price()
 
