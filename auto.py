@@ -1,4 +1,5 @@
 import time
+import datetime
 import config
 from btceapi.btceapi import common
 from btceapi.btceapi import trade
@@ -48,13 +49,16 @@ def new_nonce():
     return nonce
 nonce = new_nonce()
 
+#BTC-E API access setup
 api = trade.TradeAPI(api_key, api_secret, nonce)
+
 #gets the last trade price from btc-e
 def get_last(pair):
     tickerW = common.makeJSONRequest("/api/2/%s/ticker" % pair)
     ticker = tickerW.get(u'ticker')
     last_price = ticker.get(u'last')
     return last_price
+
 last = float(get_last(pair))
 
 #initializes 10 element list of prices with first last as value for each element
@@ -138,18 +142,29 @@ def check_if_changed(threshold, late):
         print "Not enough change to buy/sell yet"
     if verbose > 0:
         print "last price checked was", average_price()
-check_if_changed(trade_threshold, last)
 
 #function to cancel orders that havn't been filled for awhile, not complete
 #Work in progress, not sure if I'll even end up implementing it at all
-#def autocancel():
-#    orders = api.orderList(pair = pair)
-#    #print orders
-#    for o in orders:
-#        api.cancelOrder(o.order_id)
-#    if not orders:
-#        return
-#autocancel()
+def autocancel():
+    if SimMode == "on":
+        return
+    ORDER_TIMEOUT = 180
+    current_time = datetime.datetime.now()
+    try:
+        orders = api.orderList(pair = pair)
+    except Exception:
+        return
+    if not orders:
+        return
+    if len(orders) > 0:
+        print "%d outstanding orders" % len(orders)
+    order_ages = []
+    for o in orders:
+        order_ages.append([o.order_id, current_time - o.timestamp_created])
+    for order in order_ages:
+        if order[1].seconds > ORDER_TIMEOUT:
+            print "Cancelling", order[0]
+            api.cancelOrder(order[0])
 
 #refreshes every <wait> seconds
 def refresh_price():
@@ -158,9 +173,11 @@ def refresh_price():
     price_list.insert(0, last)
     price_list.pop()
     nonce = new_nonce()
+    autocancel()
     check_if_changed(trade_threshold, last)
     if verbose > 1:
         print "Last price retrieved was", last
     time.sleep(wait)
+
 while True:
     refresh_price()

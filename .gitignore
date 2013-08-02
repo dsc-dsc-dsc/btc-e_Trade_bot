@@ -1,4 +1,4 @@
 config.py
-*.pyc
+*/*.pyc
 TradeLog.txt
-btceapi/*
+*.pyc
