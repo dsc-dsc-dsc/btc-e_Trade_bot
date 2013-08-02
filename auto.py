@@ -103,14 +103,15 @@ def make_trade(trade, tradex = tradex):
             api.trade(pair, "sell", price, tradex)
 
 def check_if_changed(threshold, late):
-    early = average_price()    
-    print late
-    print early, "early"
-    print average_price()
+    early = average_price()
     buyprice = early - (early*threshold)
     sellprice= early + (early*threshold) + (early*0.001)
-    print "BUYING AT", buyprice
-    print "SELLING AT", sellprice
+    if verbose > 0:
+        print late
+        print early, "early"
+        print average_price()
+        print "BUYING AT", buyprice
+        print "SELLING AT", sellprice
     if average_price() < buyprice:
         print buyprice, "reached"
         if get_balance(2) < tradex*average_price():
