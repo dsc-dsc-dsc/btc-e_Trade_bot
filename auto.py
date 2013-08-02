@@ -61,16 +61,17 @@ def get_last(pair):
 
 last = float(get_last(pair))
 
-#initializes 10 element list of prices with first last as value for each element
-price_list = [last] * 10
+#initializes LIST_SIZE-element list of prices with first last as value for each element
+LIST_SIZE = 20
+price_list = [last] * LIST_SIZE
 
-#sets current price by averaging last ten results of get_last
+#sets current price by averaging last LIST_SIZE results of get_last
 def average_price(v = 2):
     average_last = float(sum(price_list))/float(len(price_list))
-    #if verbose > 0 and v == 1:
-    #    print "last price checked was", average_last
     if verbose > 1 and v == 1:
-        print "price list is", price_list
+        print "******************************************************************************************"
+        print price_list[:10]
+        print price_list[10:]
     return average_last
 
 #get balance information, assign balance of first pair to 
@@ -111,11 +112,8 @@ def check_if_changed(threshold, late):
     buyprice = early - (early*threshold)
     sellprice= early + (early*threshold) + (early*0.001)
     if verbose > 0:
-        print late
-        print early, "early"
-        print average_price()
-        print "BUYING AT", buyprice
-        print "SELLING AT", sellprice
+        print "BUYING  ===", buyprice
+        print "SELLING ===", sellprice
     if average_price() < buyprice:
         print buyprice, "reached"
         if get_balance(2) < tradex*average_price():
@@ -141,7 +139,7 @@ def check_if_changed(threshold, late):
 #    else:
 #        print "Not enough change to buy/sell yet"
     if verbose > 0:
-        print "last price checked was", average_price()
+        print "AVERAGE ===", average_price()
 
 #function to cancel orders that havn't been filled for awhile, not complete
 #Work in progress, not sure if I'll even end up implementing it at all
@@ -176,7 +174,7 @@ def refresh_price():
     autocancel()
     check_if_changed(trade_threshold, last)
     if verbose > 1:
-        print "Last price retrieved was", last
+        print "CURRENT ===", last
     time.sleep(wait)
 
 while True:
