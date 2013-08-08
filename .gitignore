@@ -1,0 +1,4 @@
+config.py
+*/*.pyc
+TradeLog.txt
+*.pyc
