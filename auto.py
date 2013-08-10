@@ -117,7 +117,7 @@ def check_if_changed(threshold, late):
     if average_price() < buyprice:
         print buyprice, "reached"
         if get_balance(2) < tradex*average_price():
-            print tradex*average_price()-get_balance(2), "needed to buy"
+            print float(tradex)*float(average_price())-float(get_balance(2)), "needed to buy"
             return
         late = average_price()
         early = late
@@ -128,7 +128,7 @@ def check_if_changed(threshold, late):
     elif average_price() > sellprice:
         print sellprice, "reached"
         if get_balance(1) < tradex:
-            print tradex-get_balance(1), "needed to sell"
+            print float(tradex)-float(get_balance(1)), "needed to sell"
             return
         late = average_price()
         early = late
