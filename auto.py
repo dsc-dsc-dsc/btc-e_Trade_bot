@@ -108,6 +108,7 @@ def make_trade(trade, tradex = tradex):
             api.trade(pair, "sell", price, tradex)
 early = average_price()
 def check_if_changed(threshold, late):
+    global early
     buyprice = early - (early*threshold)
     sellprice= early + (early*threshold) + (early*0.001)
     if verbose > 0:
