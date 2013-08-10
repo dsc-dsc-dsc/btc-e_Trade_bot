@@ -106,9 +106,8 @@ def make_trade(trade, tradex = tradex):
         TLog.close()
         if SimMode == "off":
             api.trade(pair, "sell", price, tradex)
-
+early = average_price()
 def check_if_changed(threshold, late):
-    early = average_price()
     buyprice = early - (early*threshold)
     sellprice= early + (early*threshold) + (early*0.001)
     if verbose > 0:
