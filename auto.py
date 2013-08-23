@@ -10,7 +10,7 @@ from configobj import ConfigObj
 #Value that determines how significant a change must be to make a trade
 #If price goes up or down this percent, a sell or buy will be attempted
 trade_threshold = config.Threshold
-#
+
 #0 = only report trades or attempted trades, 1 = inform of current price 2 = relay all data collected
 verbose = config.Verbosity 
 
@@ -163,14 +163,17 @@ def check_if_changed(threshold, late):
         print "SELLING ===", sellprice
     if average_price() < buyprice:
         print buyprice, "reached"
-        if get_balance(2) < tradex*average_price():
-            print float(tradex)*float(average_price())-float(get_balance(2)), "needed to buy"
-            return
+        #if get_balance(2) < tradex*average_price():
+            #print float(tradex)*float(average_price())-float(get_balance(2)), "needed to buy"
+            #return
         late = average_price()
         early = late
 	print "ready to buy, Last action was:", saved_action()
         if saved_action() == "sell":
-           make_trade("buy")
+	    if get_balance(2) > tradex*average_price():
+               make_trade("buy")
+	    else :
+	       print float(tradex)*float(average_price())-float(get_balance(2)), "needed to buy"	 	
 	else :
 	   print "Failed to buy"
         check_if_changed(trade_threshold, get_last(pair))

@@ -2,18 +2,17 @@
 API_KEY=""
 API_SECRET=""
 
-#
+
 #OPTIONAL SETTINGS
 #THESE SHOULD BE LEFT TO DEFAULTS UNLESS YOU KNOW WHAT YOU ARE DOING
 
-Trade_Amount=0.1
+Trade_Amount=100
 #Amount of currency traded/bought each transaction
 
 Threshold=0.006
 #Percent of change required to buy/sell.  Default is 0.6%
 
-Sell_Profit=0.015
-#Set your desired minimum sale profit in percent 
+Sell_Profit=0.02
 
 Pair="ftc_btc"
 #Currency pair to trade in, may be set to anything listed on btc-e
