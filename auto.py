@@ -181,15 +181,18 @@ def check_if_changed(threshold, late):
             print "Price threshold updated to", early
     elif average_price() > sellprice:
         print sellprice, "reached"
-        if get_balance(1) < tradex:
-            print float(tradex)-float(get_balance(1)), "needed to sell"
-            return
+        # if get_balance(1) < tradex:
+           #"print float(tradex)-float(get_balance(1)), "needed to sell"
+            #return
         late = average_price()
         early = late
         print early, "early"
 	print "ready to sell, Last action was:", saved_action()
         if saved_action() == "buy" and calc_profit() <= sellprice:
-           make_trade("sell")
+  	   if get_balance(1) > tradex:        
+	      make_trade("sell")
+	   else :
+	      print float(tradex)-float(get_balance(1)), "needed to sell"		
 	else :
            print "Failed to sell"
         check_if_changed(trade_threshold, get_last(pair))
@@ -204,7 +207,7 @@ def check_if_changed(threshold, late):
 def autocancel():
     if SimMode == "on":
         return
-    ORDER_TIMEOUT = 30
+    ORDER_TIMEOUT = 180
     current_time = datetime.datetime.now()
     try:
         orders = api.orderList(pair = pair)
