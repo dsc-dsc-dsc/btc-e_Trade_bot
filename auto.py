@@ -135,23 +135,21 @@ def make_trade(trade, tradex = tradex):
         print "buying", tradex
         if SimMode == "off":
 	    save_old()
-           #trade_res = 
 	    api.trade(pair, "buy", price, tradex)
         TLog.write(tradeInfo)
 	save_state("buy",price)
-        print "writing", tradeInfo#, trade_res
+        print "writing", tradeInfo
         TLog.close()
     if trade == "sell":
         print "selling", tradex
         print "writing", tradeInfo
-        TLog.close()
         if SimMode == "off":
 	    save_old()
-           #trade_res =
 	    api.trade(pair, "sell", price, tradex)
 	TLog.write(tradeInfo)
 	save_state("sell",price)
-	print "writing", tradeInfo#, trade_res
+	print "writing", tradeInfo
+	TLog.close()
 
 early = average_price()
 def check_if_changed(threshold, late):
