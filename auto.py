@@ -2,6 +2,7 @@ import time
 import datetime
 import config
 import os
+import logging
 from btceapi.btceapi import common
 from btceapi.btceapi import trade
 from btceapi.btceapi import public
@@ -24,6 +25,9 @@ sell_profit = config.Sell_Profit
 #how many seconds to wait before refreshing price
 wait = config.Refresh
 
+errlog = 'Errorlog.txt'
+logging.basicConfig(filename=errlog, level=logging.DEBUG,)
+logging.debug('Logfile working correctly')
 api_key = config.API_KEY
 api_secret = config.API_SECRET
 
@@ -240,7 +244,18 @@ def refresh_price():
 	print "LAST ACTION", saved_action(), "@", saved_price()
 	if saved_action() == "buy":
 	   print "Next profitable sell @", calc_profit()	 
-    time.sleep(wait)
 
 while True:
-    refresh_price()
+   time.sleep(wait)
+   try:
+        refresh_price()
+   except Exception:
+        try:
+            err
+        except:
+            err = "000"
+        print "Something went wrong! Could not connect to BTC-E! Error Code", err
+        logging.exception('Got exception on main handler')
+        time.sleep(60)
+        continue	
+    
