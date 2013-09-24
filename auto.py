@@ -1,10 +1,12 @@
 import time
 import datetime
 import config
+import os
 import logging
 from btceapi.btceapi import common
 from btceapi.btceapi import trade
 from btceapi.btceapi import public
+from configobj import ConfigObj
 
 #Value that determines how significant a change must be to make a trade
 #If price goes up or down this percent, a sell or buy will be attempted
@@ -18,6 +20,8 @@ tradex = config.Trade_Amount
 
 SimMode = config.Simulation
 
+#Minimum profit in percent 
+sell_profit = config.Sell_Profit
 #how many seconds to wait before refreshing price
 wait = config.Refresh
 
@@ -36,6 +40,42 @@ curr1 += pair[:3]
 curr2 = 'balance_'
 curr2 += pair[4:]
 
+#functions for loading and saving last actions and buy/sell price 
+def saved_action():
+    state = ConfigObj('saved_state.ini')
+    lastaction = state['last_action']
+    return lastaction
+
+def saved_price():
+    state = ConfigObj('saved_state.ini')		
+    lastprice = state['last_price']
+    return lastprice
+	
+def save_state(action,price):
+    save = ConfigObj('saved_state.ini')
+    save['last_action'] = action
+    save['last_price'] = price
+    save.write()
+
+#returns smallest amount after a buy to make a profitable sell
+def calc_profit():
+    profit = float(saved_price()) + (float(saved_price()) * float(sell_profit))
+    return profit
+
+#Resets current action in case of an autocancel
+def revert_on_cancel():
+    revert =  ConfigObj('saved_state.ini')
+    revert['last_price'] =  revert['old_price']
+    revert['last_action'] =  revert['old_action']
+    revert.write()
+
+#Saves the last action and price for autocancel
+def save_old():
+    saveold =  ConfigObj('saved_state.ini')
+    saveold['old_price'] = saveold['last_price']
+    saveold['old_action'] = saveold['last_action']
+    saveold.write()
+				
 #earliest = average_price()
 #early = earliest
 
@@ -64,7 +104,6 @@ def get_last(pair):
     return last_price
 
 last = float(get_last(pair))
-
 #initializes LIST_SIZE-element list of prices with first last as value for each element
 LIST_SIZE = 20
 price_list = [last] * LIST_SIZE
@@ -99,17 +138,23 @@ def make_trade(trade, tradex = tradex):
     if trade == "buy":
         print "buying", tradex
         if SimMode == "off":
-            api.trade(pair, "buy", price, tradex)
+	    save_old()
+	    api.trade(pair, "buy", price, tradex)
         TLog.write(tradeInfo)
+	save_state("buy",price)
         print "writing", tradeInfo
         TLog.close()
     if trade == "sell":
         print "selling", tradex
-        TLog.write(tradeInfo)
         print "writing", tradeInfo
-        TLog.close()
         if SimMode == "off":
-            api.trade(pair, "sell", price, tradex)
+	    save_old()
+	    api.trade(pair, "sell", price, tradex)
+	TLog.write(tradeInfo)
+	save_state("sell",price)
+	print "writing", tradeInfo
+	TLog.close()
+
 early = average_price()
 def check_if_changed(threshold, late):
     global early
@@ -120,24 +165,38 @@ def check_if_changed(threshold, late):
         print "SELLING ===", sellprice
     if average_price() < buyprice:
         print buyprice, "reached"
-        if get_balance(2) < tradex*average_price():
-            print float(tradex)*float(average_price())-float(get_balance(2)), "needed to buy"
-            return
+        #if get_balance(2) < tradex*average_price():
+            #print float(tradex)*float(average_price())-float(get_balance(2)), "needed to buy"
+            #return
         late = average_price()
         early = late
-        make_trade("buy")
+	print "ready to buy, Last action was:", saved_action()
+        if saved_action() == "sell":
+	    if get_balance(2) > tradex*average_price():
+               make_trade("buy")
+	    else :
+	       print float(tradex)*float(average_price())-float(get_balance(2)), "needed to buy"	 	
+	else :
+	   print "Failed to buy"
         check_if_changed(trade_threshold, get_last(pair))
         if verbose > 1:
             print "Price threshold updated to", early
     elif average_price() > sellprice:
         print sellprice, "reached"
-        if get_balance(1) < tradex:
-            print float(tradex)-float(get_balance(1)), "needed to sell"
-            return
+        # if get_balance(1) < tradex:
+           #"print float(tradex)-float(get_balance(1)), "needed to sell"
+            #return
         late = average_price()
         early = late
         print early, "early"
-        make_trade("sell")
+	print "ready to sell, Last action was:", saved_action()
+        if saved_action() == "buy" and calc_profit() <= sellprice:
+  	   if get_balance(1) > tradex:        
+	      make_trade("sell")
+	   else :
+	      print float(tradex)-float(get_balance(1)), "needed to sell"		
+	else :
+           print "Failed to sell"
         check_if_changed(trade_threshold, get_last(pair))
         print "Price threshold updated to", early
 #    else:
@@ -167,9 +226,11 @@ def autocancel():
         if order[1].seconds > ORDER_TIMEOUT:
             print "Cancelling", order[0]
             api.cancelOrder(order[0])
-
+	    revert_on_cancel()		
+					
 #refreshes every <wait> seconds
 def refresh_price():
+    print "\n" * 100		
     last = float(get_last(pair))
     average_price(1)
     price_list.insert(0, last)
@@ -179,11 +240,16 @@ def refresh_price():
     check_if_changed(trade_threshold, last)
     if verbose > 1:
         print "CURRENT ===", last
+	print "BALANCE:", pair[:3],get_balance(1),"/",pair[4:],get_balance(2)
+	print "LAST ACTION", saved_action(), "@", saved_price()
+	if saved_action() == "buy":
+	   print "Next profitable sell @", calc_profit()	 
+
 while True:
-    time.sleep(wait)
-    try:
+   time.sleep(wait)
+   try:
         refresh_price()
-    except Exception:
+   except Exception:
         try:
             err
         except:
@@ -191,4 +257,5 @@ while True:
         print "Something went wrong! Could not connect to BTC-E! Error Code", err
         logging.exception('Got exception on main handler')
         time.sleep(60)
-        continue
+        continue	
+    
