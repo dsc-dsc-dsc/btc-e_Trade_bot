@@ -1,4 +1,7 @@
+Version Beta 0.1.8:
+     -merged in changes, may be unstable, testing release
 8.2.2013
+Version Beta 0.1.7:
      -Removed extraneous comments
      -Modified a few print statements
      -Implemented autocancel() for aging orders
