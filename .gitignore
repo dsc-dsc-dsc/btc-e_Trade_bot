@@ -1,5 +1,5 @@
 config.py
 */*.pyc
 TradeLog.txt
-ErrorLog.txt
+Errorlog.txt
 *.pyc
