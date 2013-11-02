@@ -1,3 +1,4 @@
+#Copyright (c) 2013 Dash Scarborough
 import time
 import datetime
 import config
