@@ -1,7 +1,6 @@
 #Copyright (c) 2013 Dash Scarborough
 import time
 import datetime
-import config
 import os
 import logging
 from btceapi.btceapi import common
@@ -9,38 +8,50 @@ from btceapi.btceapi import trade
 from btceapi.btceapi import public
 from configobj import ConfigObj
 
+config = open('Config.txt')
+lines = config.readlines()
+
 #Value that determines how significant a change must be to make a trade
 #If price goes up or down this percent, a sell or buy will be attempted
-trade_threshold = config.Threshold
+trade_threshold = float(lines[11][10:])
 
 #0 = only report trades or attempted trades, 1 = inform of current price 2 = relay all data collected
-verbose = config.Verbosity 
+verbose = int(lines[25][10])
 
 #Amount to trade at
-tradex = config.Trade_Amount
+tradex = float(lines[7][13:])
 
-SimMode = config.Simulation
+SimMode = lines[22][11:].rstrip()
 
 #Minimum profit in percent 
-sell_profit = config.Sell_Profit
+sell_profit = float(lines[14][13:])
 #how many seconds to wait before refreshing price
-wait = config.Refresh
+wait = int(lines[19][8:])
 
 errlog = 'Errorlog.txt'
 logging.basicConfig(filename=errlog, level=logging.DEBUG,)
 logging.debug('Logfile working correctly')
-api_key = config.API_KEY
-api_secret = config.API_SECRET
+api_key = lines[1][8:].rstrip()
+api_secret = lines[2][11:].rstrip()
 
 #currency pairing i.e. btc/usd, btc/ltc etc.
-pair = config.Pair
+pair = lines[16][5:].rstrip()
 
 #set these to your pair, (i.e. "btc" for first and "usd" for the second for btc_usd)
 curr1 = 'balance_'
 curr1 += pair[:3]
 curr2 = 'balance_'
 curr2 += pair[4:]
-
+if verbose > 3:
+	print "trade threshold =", trade_threshold
+	print "verbose =", verbose
+	print "tradex =", tradex
+	print "SimMode =", SimMode
+	print "sell_profit =", sell_profit
+	print "wait =", wait
+	#print "api_key =", api_key
+	#print "api_secret =", api_secret
+	print "pair =", pair
 #functions for loading and saving last actions and buy/sell price 
 def saved_action():
     state = ConfigObj('saved_state.ini')
@@ -120,16 +131,18 @@ def average_price(v = 2):
 
 #get balance information, assign balance of first pair to 
 def get_balance(get):
-    account_info = vars(api.getInfo())
-    bal1 = account_info[curr1]
-    bal2 = account_info[curr2]
     if SimMode == "on":
         return 99999
+	account_info = vars(api.getInfo())
+    bal1 = account_info[curr1]
+    bal2 = account_info[curr2]
     if get == 1:
         return bal1
     if get == 2:
         return bal2
-
+tradex = tradex*get_balance(1)
+		
+		
 def make_trade(trade, tradex = tradex):
     TLog = open('TradeLog.txt', 'a')
     price = average_price()

@@ -1,10 +1,15 @@
+Version Beta 0.2.0:
+     -Made more "noob-friendly" pre-compiled EXE for release
+     -Made trade amount dependant on a percentage of balance rather than set value
+     -fixed some spelling errors in this file
+     -made config file read from a text file rather than a python file
 Version Beta 0.1.8:
      -merged in changes, may be unstable, testing release
 8.2.2013
 Version Beta 0.1.7:
      -Removed extraneous comments
      -Modified a few print statements
-     -Implemented autocancel() for aging orders
+     -Implemented autocancel() for ageing orders
 
 Version Beta 0.1.6:
     -added Trade log to text file
@@ -14,13 +19,13 @@ Version Beta 0.1.5:
     -updated config file to be more clear
 
 Version Beta 0.1.4:
-    -Added seperate Config file
+    -Added separate Config file
     -Added balance checking
     -made bot stop updating prices once balance reaches 0
 
 Version Beta 0.1.3:
     -added variable buy/sell amount
-    -minor code formating changes
+    -minor code formatting changes
 
 Version Beta 0.1.2.1/2:
     -changed trading algo
