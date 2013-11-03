@@ -7,7 +7,7 @@ from btceapi.btceapi import common
 from btceapi.btceapi import trade
 from btceapi.btceapi import public
 from configobj import ConfigObj
-
+err = "1"
 config = open('Config.txt')
 lines = config.readlines()
 
