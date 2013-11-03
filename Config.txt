@@ -5,7 +5,7 @@ API_SECRET=
 #OPTIONAL SETTINGS
 #THESE SHOULD BE LEFT TO DEFAULTS UNLESS YOU KNOW WHAT YOU ARE DOING
 
-Trade_Amount=0.102
+Trade_Amount=0.012
 #Amount of currency traded/bought each transact
 #Measured in percentage of balance (0.1 = 10% of balance)
 
@@ -20,7 +20,7 @@ Pair=ltc_btc
 Refresh=15
 #How often to refresh in seconds
 
-Simulation=on
+Simulation=off
 #set to either "on" or "off" (off be default)
 
 Verbosity=5

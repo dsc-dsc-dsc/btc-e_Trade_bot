@@ -49,8 +49,8 @@ if verbose > 3:
 	print "SimMode =", SimMode
 	print "sell_profit =", sell_profit
 	print "wait =", wait
-	#print "api_key =", api_key
-	#print "api_secret =", api_secret
+	print "api_key =", api_key
+	print "api_secret =", api_secret
 	print "pair =", pair
 #functions for loading and saving last actions and buy/sell price 
 def saved_action():
@@ -132,16 +132,18 @@ def average_price(v = 2):
 #get balance information, assign balance of first pair to 
 def get_balance(get):
     if SimMode == "on":
-        return 99999
-	account_info = vars(api.getInfo())
+        return 999999
+    account_info = vars(api.getInfo())
     bal1 = account_info[curr1]
     bal2 = account_info[curr2]
     if get == 1:
         return bal1
     if get == 2:
         return bal2
-tradex = tradex*get_balance(1)
-		
+tradex1 = tradex
+tradex = tradex1*float(get_balance(1))
+if tradex == 0.0:
+    tradex = tradex1*float(get_balance(2))/float(average_price())
 		
 def make_trade(trade, tradex = tradex):
     TLog = open('TradeLog.txt', 'a')
@@ -257,7 +259,8 @@ def refresh_price():
 	print "BALANCE:", pair[:3],get_balance(1),"/",pair[4:],get_balance(2)
 	print "LAST ACTION", saved_action(), "@", saved_price()
 	if saved_action() == "buy":
-	   print "Next profitable sell @", calc_profit()	 
+	   print "Next profitable sell @", calc_profit()
+    print "TRADE AMOUNT ===", tradex 
 
 while True:
    time.sleep(wait)

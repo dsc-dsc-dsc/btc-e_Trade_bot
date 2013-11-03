@@ -3,3 +3,6 @@ config.py
 TradeLog.txt
 Errorlog.txt
 *.pyc
+build/*
+dist/*
+*.zip
