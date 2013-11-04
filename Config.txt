@@ -12,7 +12,7 @@ Trade_Amount=0.012
 Threshold=0.006
 #Percent of change required to buy/sell.  Default is 0.6%
 
-Sell_Profit=0.05
+###Do not add or delete any lines, do not use quotes either, thank you###
 
 Pair=ltc_btc
 #Currency pair to trade in, may be set to anything listed on btc-e
