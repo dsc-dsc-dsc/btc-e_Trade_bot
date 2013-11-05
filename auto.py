@@ -11,7 +11,7 @@ from math import ceil
 err = "1"
 config = open('Config.txt')
 lines = config.readlines()
-
+nonce = 0
 #Value that determines how significant a change must be to make a trade
 #If price goes up or down this percent, a sell or buy will be attempted
 trade_threshold = float(lines[11][10:])
@@ -102,7 +102,8 @@ else:
 
 #set nonce to current time
 def new_nonce():
-    if nonce = 0:
+    global nonce
+    if nonce == 0:
         nonce = int(time.time())
     else:
         nonce+=1
