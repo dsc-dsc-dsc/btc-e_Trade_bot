@@ -161,18 +161,20 @@ def make_trade(trade, tradex = tradex):
     if trade == "buy":
         print "buying", tradex
         if SimMode == "off":
-            save_old()
             api.trade(pair, "buy", ceil(price*100000)/100000.0, tradex)
         TLog.write(tradeInfo)
+        if SimMode == "off":
+            save_old()
         save_state("buy",price)
         print "writing", tradeInfo
         TLog.close()
     if trade == "sell":
         print "selling", tradex
         if SimMode == "off":
-            save_old()
             api.trade(pair, "sell", ceil(price*100000)/100000.0, tradex)
         TLog.write(tradeInfo)
+        if SimMode == "off":
+            save_old()
         save_state("sell",price)
         print "writing", tradeInfo
         TLog.close()
