@@ -4,6 +4,8 @@ BTC-e Trade bot
 Uses alanmcintyre's btc-e api to automatically buy/sell a chosen currency from btc-e.
 found at: https://github.com/alanmcintyre/btce-api
 
+Development halted for now, forking and solving of issues encouraged
+
 ### Usage
 
 To use the bot, just put your api key and secret into the config file, then run auto.py with python 2.7
