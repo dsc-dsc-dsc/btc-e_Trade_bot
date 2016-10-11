@@ -16,9 +16,9 @@ The testing folder is for testing releases that may or may not be working, try t
 If you like my bot, a donation to either one of the following addresses  would be appreciated:
 
     send a BTC-E code to me (mcfundash) on btc-e! (recommended)
-    LTC:  LNNBkSyEDQZnUwV9E5GYA9eGTUrJ1zwDLS
-    BTC:  15p6CZseGB9bzEc8NYtmS3BNLUWhuPQ4VJ
-    DOGE: DFN2cmCAontzm39gJnry3XTuy28LVe1cKb
+    LTC:  LgMzHvxUEVYmtSKm2gitbvEZUGhoB57xhc
+    BTC:  1BmEdTQwHHsg3DAEPQG8szPL2TeWcbA78J
+    ETH:  0x014e45c4cdccffba5f2161fdfbb25ce3f140e228
 
 ### Legal
 
